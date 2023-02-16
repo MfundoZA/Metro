@@ -6,7 +6,15 @@ while (input != "stop")
     switch (input.ToLower())
     {
         case "hi":
-            // log date and time
+            // check if day is new
+            // if true then log date and time
+
+            if(isClockedIn())
+            {
+                Console.WriteLine("You're already clocked in! Here's your log for the day (use \"metero rpt\" whenever you would like to view again):");
+
+            }
+            // else day report and break
             // save locally
 
             Console.WriteLine("Hi");
@@ -43,6 +51,11 @@ while (input != "stop")
     }
 
     input = Console.ReadLine();
+}
+
+bool isClockedIn()
+{
+    throw new NotImplementedException();
 }
 
 Console.ReadKey();
