@@ -31,6 +31,16 @@ switch (input.ToLower())
             Console.WriteLine("Bye");
             break;
 
+    case "log":
+    // Think about how task logging will work
+    // Are tasks always serial? Obiviously not. So how do we keep
+    // track of multiple task simultaneously? Maybe we can have it
+    // so that a user will have to start a task in order to track
+    // the time spent. A user might also be able to estimate
+    // roughly how much time they spent on a task instead
+
+    // get minutes from clock in time or last task
+
         case "rpt":
             // display productivity for the last 30 days
             break;
