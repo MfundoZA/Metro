@@ -1,9 +1,6 @@
 ﻿var input = args[0];
 
-while (input != "stop")
-{
-
-    switch (input.ToLower())
+switch (input.ToLower())
     {
         case "hi":
             // check if day is new
@@ -50,8 +47,7 @@ while (input != "stop")
 
     }
 
-    input = Console.ReadLine();
-}
+input = Console.ReadLine();
 
 bool isClockedIn()
 {
