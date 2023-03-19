@@ -6,12 +6,18 @@ switch (input.ToLower())
             // check if day is new
             // if true then log date and time
 
-            if(isClockedIn())
+        // if user is already clocked in report current day
+        if (isClockedIn())
             {
                 Console.WriteLine("You're already clocked in! Here's your log for the day (use \"metero rpt\" whenever you would like to view again):");
-
+            break;
             }
-            // else day report and break
+
+        // Welcome user to new day and log the date and
+        // TODO Check if ChatGPT can do this
+        var currentDateTime = DateTime.Now;
+        Console.WriteLine($"Good day! You are now clocked in at {currentDateTime}. Use ");
+
             // save locally
 
             Console.WriteLine("Hi");
