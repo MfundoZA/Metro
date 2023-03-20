@@ -3,9 +3,6 @@
 switch (input.ToLower())
     {
         case "hi":
-            // check if day is new
-            // if true then log date and time
-
         // if user is already clocked in report current day
         if (isClockedIn())
             {
