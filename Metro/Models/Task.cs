@@ -9,6 +9,7 @@ namespace Metro.Models
 {
     public class Task
     {
+        public int Id { get; set; }
         public string Description { get; set; }
         public List<Tuple<DateTime, DateTime>> Sessions { get; set; }
         public bool IsComplete { get; set; }

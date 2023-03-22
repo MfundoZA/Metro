@@ -9,6 +9,7 @@ namespace Metro.Models
 {
     public class WorkDay
     {
+        public int Id { get; set; }
         public DateTime ClockInTime { get; set; }
         public DateTime ClockOutTime { get; set;}
 
