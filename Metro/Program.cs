@@ -1,3 +1,9 @@
+﻿using Metro.Models;
+using Metro.Persistance;
+using System.Globalization;
+using System.Text;
+using System.Text.Json;
+
 ﻿var input = args[0];
 
 switch (input.ToLower())
