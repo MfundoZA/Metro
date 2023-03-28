@@ -7,32 +7,36 @@ using System.Text.Json;
 ﻿var input = args[0];
 
 switch (input.ToLower())
-    {
-        case "hi":
+{
+    case "hi":
         // if user is already clocked in report current day
         if (isClockedIn())
-            {
-                Console.WriteLine("You're already clocked in! Here's your log for the day (use \"metero rpt\" whenever you would like to view again):");
+        {
+            Console.WriteLine("You're already clocked in! Here's your log for the day (use \"metero rpt\" whenever you would like to view again):");
             break;
-            }
+        }
 
         // Welcome user to new day and log the date and
         // TODO Check if ChatGPT can do this
-        var currentDateTime = DateTime.Now;
-        Console.WriteLine($"Good day! You are now clocked in at {currentDateTime}. Use ");
+        var currentWorkDay = new WorkDay();
+        currentWorkDay.ClockInTime = DateTime.Now;
 
-            // save locally
+        TextFileWriter.Write(currentWorkDay, "Workdays.json");
+         
+        Console.WriteLine($"Good day! You are now clocked in at {currentWorkDay.ClockInTime}. Use ");
 
-            Console.WriteLine("Hi");
-            break;
 
-        case "bye":
-            // log last task duration
-            // log clock off time
-            // save locally
 
-            Console.WriteLine("Bye");
-            break;
+        Console.WriteLine("Hi");
+        break;
+
+    case "bye":
+        // log last task duration
+        // log clock off time
+        // save locally
+
+        Console.WriteLine("Bye");
+        break;
 
     case "log":
     // Think about how task logging will work
@@ -44,27 +48,27 @@ switch (input.ToLower())
 
     // get minutes from clock in time or last task
 
-        case "rpt":
-            // display productivity for the last 30 days
-            break;
+    case "rpt":
+        // display productivity for the last 30 days
+        break;
 
-        case "rpt-year":
-            // display productivity for the last 12 months
-            break;
+    case "rpt-year":
+        // display productivity for the last 12 months
+        break;
 
-        case "rpt-day":
-            // display productivity for the last 24 hours
-            break;
+    case "rpt-day":
+        // display productivity for the last 24 hours
+        break;
 
-        case "help":
-            // call method that will display all commands
-            break;
+    case "help":
+        // call method that will display all commands
+        break;
 
-        default:
-            // call method that will dispaly all commands
-            break;
+    default:
+        // call method that will dispaly all commands
+        break;
 
-    }
+}
 
 bool isClockedIn()
 {
@@ -88,7 +92,7 @@ bool isClockedIn()
     {
         return false;
     }
-
+    
 
     if (workDays == null || workDays.Count == 0)
     {
@@ -99,7 +103,7 @@ bool isClockedIn()
         return true; 
     }
     else
-{
+    {
         return false;
     }
 }
