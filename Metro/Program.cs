@@ -66,11 +66,42 @@ switch (input.ToLower())
 
     }
 
-input = Console.ReadLine();
-
 bool isClockedIn()
 {
-    throw new NotImplementedException();
+    string jsonInput;
+    byte[] byteArray;
+    MemoryStream inputStream;
+    List<WorkDay>? workDays;
+
+    try
+    { 
+        jsonInput = TextFileReader.ReadAll("Workdays.json");
+        byteArray = Encoding.UTF8.GetBytes(jsonInput);
+        inputStream = new MemoryStream(byteArray);
+
+        workDays = JsonSerializer.DeserializeAsync<List<WorkDay>>(inputStream, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        }).Result;
+    }
+    catch (Exception ex) when (ex is JsonException || ex is FileNotFoundException)
+    {
+        return false;
+    }
+
+
+    if (workDays == null || workDays.Count == 0)
+    {
+        return false;
+    }
+    else if (workDays.Last().ClockInTime.Date == DateTime.Now.Date)
+    {
+        return true; 
+    }
+    else
+{
+        return false;
+    }
 }
 
 Console.ReadKey();
