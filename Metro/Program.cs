@@ -24,14 +24,12 @@ switch (input.ToLower())
         TextFileWriter.Write(currentWorkDay, "Workdays.json");
          
         Console.WriteLine($"Good day! You are now clocked in at {currentWorkDay.ClockInTime}. Use ");
-
-
-
-        Console.WriteLine("Hi");
         break;
 
     case "bye":
         // log last task duration
+
+
         // log clock off time
         // save locally
 
