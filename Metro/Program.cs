@@ -70,6 +70,24 @@ switch (input.ToLower())
 
 bool isClockedIn()
 {
+    var workDays = getAllWorkDays();
+
+    if (workDays == null || workDays.Count == 0)
+    {
+        return false;
+    }
+    else if (workDays.Last().ClockInTime.Date == DateTime.Now.Date)
+    {
+        return true; 
+    }
+    else
+    {
+        return false;
+    }
+}
+
+List<WorkDay>? getAllWorkDays()
+{
     string jsonInput;
     byte[] byteArray;
     MemoryStream inputStream;
@@ -88,22 +106,8 @@ bool isClockedIn()
     }
     catch (Exception ex) when (ex is JsonException || ex is FileNotFoundException)
     {
-        return false;
+        workDays = null;
     }
     
-
-    if (workDays == null || workDays.Count == 0)
-    {
-        return false;
-    }
-    else if (workDays.Last().ClockInTime.Date == DateTime.Now.Date)
-    {
-        return true; 
-    }
-    else
-    {
-        return false;
-    }
+    return workDays;
 }
-
-Console.ReadKey();
