@@ -31,8 +31,28 @@ switch (input.ToLower())
 
 
         // log clock off time
-        // save locally
+        var workDays = getAllWorkDays();
 
+        if (workDays != null)
+        {
+            if (workDays.Last().ClockOutTime == null)
+            {
+                workDays.Last<WorkDay>().ClockOutTime = DateTime.Now;
+            }
+            else
+            {
+                // Get user confirmation to update ClockOutTime
+            }
+        }
+
+        // save locally
+        var stream = File.Open("Workdays.json", FileMode.Create);
+        JsonSerializer.SerializeAsync(stream, workDays, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        stream.DisposeAsync();
         Console.WriteLine("Bye");
         break;
 
