@@ -11,7 +11,7 @@ namespace Metro.Models
     {
         public int Id { get; set; }
         public DateTime ClockInTime { get; set; }
-        public DateTime ClockOutTime { get; set;}
+        public DateTime? ClockOutTime { get; set;}
 
         public WorkDay()
         {

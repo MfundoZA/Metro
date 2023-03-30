@@ -12,11 +12,11 @@ namespace Metro.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public List<Session> Sessions { get; set; }
-        public bool IsComplete { get; set; }
+        public bool? IsComplete { get; set; }
 
         public Task() { }
 
-        public Task(string description, List<Session> sessions, bool isComplete)
+        public Task(string description, List<Session> sessions, bool? isComplete)
         {
             Description = description;
             Sessions = sessions;
