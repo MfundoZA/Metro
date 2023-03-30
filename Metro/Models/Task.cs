@@ -10,8 +10,8 @@ namespace Metro.Models
     public class Task
     {
         public int Id { get; set; }
-        public string Description { get; set; }
-        public List<Session> Sessions { get; set; }
+        public string Description { get; set; } = null!;
+        public List<Session> Sessions { get; set; } = null!;
         public bool? IsComplete { get; set; }
 
         public Task() { }
