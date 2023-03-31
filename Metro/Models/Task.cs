@@ -11,16 +11,16 @@ namespace Metro.Models
     {
         public int Id { get; set; }
         public string Description { get; set; } = null!;
-        public List<Session> Sessions { get; set; } = null!;
-        public bool? IsComplete { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly? EndTime { get; set; }
 
         public Task() { }
 
-        public Task(string description, List<Session> sessions, bool? isComplete)
+        public Task(string description, TimeOnly startTime, TimeOnly endTime)
         {
             Description = description;
-            Sessions = sessions;
-            IsComplete = isComplete;
+            StartTime = startTime;
+            EndTime = endTime;
         }
 
         public override string ToString() => JsonSerializer.Serialize<Task>(this);
