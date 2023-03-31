@@ -36,6 +36,7 @@ switch (input.ToLower())
         TextFileWriter.Write(currentWorkDay, "Workdays.json");
          
         Console.WriteLine($"Good day! You are now clocked in at {currentWorkDay.ClockInTime}. Use ");
+        }
         break;
 
     case "bye":
@@ -68,6 +69,8 @@ switch (input.ToLower())
         Console.WriteLine("Bye");
         break;
 
+        {
+        }
     case "log":
     // Think about how task logging will work
     // Are tasks always serial? Obiviously not. So how do we keep
