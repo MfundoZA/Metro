@@ -16,10 +16,21 @@ switch (input.ToLower())
             break;
         }
 
+        {
+            WorkDay currentWorkDay = new WorkDay();
+
+            if (args.Length == 1)
+            {
         // Welcome user to new day and log the date and
         // TODO Check if ChatGPT can do this
-        var currentWorkDay = new WorkDay();
         currentWorkDay.ClockInTime = DateTime.Now;
+            }
+            else if (args.Length == 2 && args[1].Contains(':'))
+            {
+                var time = args[1].Split(':');
+
+                currentWorkDay.ClockInTime = DateTime.Today.AddHours(Double.Parse(time[0])).AddMinutes(Double.Parse(time[1]));
+            }
 
         TextFileWriter.Write(currentWorkDay, "Workdays.json");
          
