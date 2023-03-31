@@ -69,8 +69,29 @@ switch (input.ToLower())
         Console.WriteLine("Bye");
         break;
 
+    case "start":
+        var taskDescription = args[1];
+        var startTime = TimeOnly.FromDateTime(DateTime.Now);
+        Task currentTask;
+
         {
+            WorkDay currentWorkDay = getAllWorkDays().Last();
+
+            if (args.Length == 1)
+            {
+                Console.WriteLine("Error! A task must have a description! Please try again.");
+                break;
+            }
+            else {
+                currentTask = new Task(taskDescription, startTime, currentWorkDay);
         }
+        }
+
+        TextFileWriter.Write(currentTask.ToString(), "Tasks.json");
+
+        Console.WriteLine($"Tracking Task: {taskDescription}");
+        break;
+
     case "log":
     // Think about how task logging will work
     // Are tasks always serial? Obiviously not. So how do we keep
