@@ -10,12 +10,12 @@ namespace Metro.Models
     public class Session
     {
         public int Id { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly? EndTime { get; set; }
 
         public Session() { }
 
-        public Session(DateTime startTime, DateTime endTime)
+        public Session(TimeOnly startTime, TimeOnly endTime)
         {
             StartTime = startTime;
             EndTime = endTime;
