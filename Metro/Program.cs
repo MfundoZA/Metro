@@ -40,6 +40,7 @@ switch (input.ToLower())
         break;
 
     case "bye":
+        {
         // log last task duration
 
 
@@ -67,9 +68,11 @@ switch (input.ToLower())
 
         stream.DisposeAsync();
         Console.WriteLine("Bye");
+        }
         break;
 
     case "start":
+        {
         var taskDescription = args[1];
         var startTime = TimeOnly.FromDateTime(DateTime.Now);
         Task currentTask;
@@ -82,7 +85,8 @@ switch (input.ToLower())
                 Console.WriteLine("Error! A task must have a description! Please try again.");
                 break;
             }
-            else {
+                else
+                {
                 currentTask = new Task(taskDescription, startTime, currentWorkDay);
         }
         }
@@ -90,6 +94,7 @@ switch (input.ToLower())
         TextFileWriter.Write(currentTask.ToString(), "Tasks.json");
 
         Console.WriteLine($"Tracking Task: {taskDescription}");
+        }
         break;
 
     case "log":
