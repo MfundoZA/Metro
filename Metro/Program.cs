@@ -99,9 +99,41 @@ switch (input.ToLower())
     // so that a user will have to start a task in order to track
     // the time spent. A user might also be able to estimate
     // roughly how much time they spent on a task instead
+        {
+            string description;
+            TimeOnly startTime;
+            TimeOnly endTime;
+            WorkDay workDay;
+            Task newTask;
 
     // get minutes from clock in time or last task
+            if (args.Length == 1)
+            {
+                Console.WriteLine("Error! A task must have a description! Please try again.");
+            }
+            else
+            {
+                if (args.Length == 3)
+                {
+                    description = args[1];
+                    var stream = File.Open("Tasks.json", FileMode.Append);
+                    startTime = (TimeOnly) JsonSerializer.DeserializeAsync<List<Task>>(stream, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    }).Result.Last().EndTime;
+                    stream.DisposeAsync();
+                    endTime = TimeOnly.FromDateTime(DateTime.Now);
+                    workDay = getAllWorkDays().Last();
 
+                    newTask = new Task(description, startTime, endTime, workDay);
+
+                    TextFileWriter.Write(newTask, "Tasks.json");
+                    
+                }
+            }
+
+        }
+        break;
     case "rpt":
         // display productivity for the last 30 days
         break;
