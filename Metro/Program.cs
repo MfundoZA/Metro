@@ -1,4 +1,5 @@
-﻿using Metro.Models;
+﻿using Metro.Commands;
+using Metro.Models;
 using Metro.Persistance;
 using System.Globalization;
 using System.Text;
@@ -10,6 +11,7 @@ var input = args[0];
 switch (input.ToLower())
 {
     case "hi":
+        {
         // if user is already clocked in report current day
         if (isClockedIn())
         {
@@ -17,25 +19,30 @@ switch (input.ToLower())
             break;
         }
 
-        {
-            WorkDay currentWorkDay = new WorkDay();
+            ClockInCommand? clockInCommand = null;
 
             if (args.Length == 1)
             {
         // Welcome user to new day and log the date and
         // TODO Check if ChatGPT can do this
-        currentWorkDay.ClockInTime = DateTime.Now;
+                clockInCommand = new ClockInCommand();
             }
             else if (args.Length == 2 && args[1].Contains(':'))
             {
                 var time = args[1].Split(':');
 
-                currentWorkDay.ClockInTime = DateTime.Today.AddHours(Double.Parse(time[0])).AddMinutes(Double.Parse(time[1]));
+                var clockInTime = DateTime.Today.AddHours(Double.Parse(time[0])).AddMinutes(Double.Parse(time[1]));
+
+                clockInCommand = new ClockInCommand(clockInTime);
+            }
+            else
+            {
+                throw new Exception("Invalid arguements given! Please try again.");
             }
 
-        TextFileWriter.Write(currentWorkDay, "Workdays.json");
+            clockInCommand.Execute();
          
-        Console.WriteLine($"Good day! You are now clocked in at {currentWorkDay.ClockInTime}. Use ");
+            Console.WriteLine($"Hello! You are now clocked in at {clockInCommand.TimeClockedIn}.");
         }
         break;
 
