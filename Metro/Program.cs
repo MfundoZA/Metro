@@ -1,7 +1,6 @@
 ﻿using Metro.Commands;
 using Metro.Models;
 using Metro.Persistance;
-using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using System.Globalization;
 using System.Text;
