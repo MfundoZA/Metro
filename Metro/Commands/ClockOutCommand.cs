@@ -45,5 +45,4 @@ namespace Metro.Commands
             return 0;
         }
     }
-    }
 }

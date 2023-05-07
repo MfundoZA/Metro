@@ -48,7 +48,6 @@ namespace Metro.Persistance
                 }
 
                 return list;
-            }
         }
     }
 }
