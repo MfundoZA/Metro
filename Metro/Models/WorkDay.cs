@@ -24,6 +24,11 @@ namespace Metro.Models
             ClockOutTime = clockOutTime;
         }
 
+        public WorkDay(DateTime clockInTime)
+        {
+            ClockInTime = clockInTime;
+        }
+
         public override string ToString() => JsonSerializer.Serialize<WorkDay>(this);
     }
 }
