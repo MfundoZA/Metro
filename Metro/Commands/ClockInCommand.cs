@@ -16,12 +16,27 @@ namespace Metro.Commands
 {
     public class ClockInCommand : Command<ClockInSettings>
     {
+        private const string TIME_FORMAT = "HH:MM";
         private const string FILE_NAME = "Workdays.json";
 
         public override int Execute([NotNull] CommandContext context, [NotNull] ClockInSettings settings)
         {
-            var clockIn = DateTime.Now;
-            var workday = new WorkDay(clockIn);
+            DateTime clockInTime;
+            WorkDay currentWorkday;
+
+            if (settings.Time == null)
+            {
+                clockInTime = DateTime.Now;
+            }
+            else
+            {
+                if (DateTime.TryParse(settings.Time, out clockInTime) == false)
+                {
+                    Console.Error.WriteLine("Error! Time format is incorrect. Please try again and ensure the format is " + TIME_FORMAT);
+                }
+            }
+
+            currentWorkday = new WorkDay(clockInTime);
 
             var workdays = TextFileReader.ReadAllAsList<WorkDay>(FILE_NAME);
             workdays.Add(workday);
