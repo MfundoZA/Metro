@@ -9,6 +9,9 @@ namespace Metro.Commands
 {
     public class ClockOutSettings : CommandSettings
     {
+        [CommandArgument(0, "[time]")]
+        public string? Time { get; set; }
+
         [CommandOption("-f|--force")]
         public bool? Force { get; set; }
     }
