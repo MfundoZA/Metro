@@ -34,6 +34,7 @@ namespace Metro.Commands
                 if (DateTime.TryParse(settings.Time, out clockInTime) == false)
                 {
                     Console.Error.WriteLine("Error! Time format is incorrect. Please try again and ensure the format is " + TIME_FORMAT);
+                    return -1;
                 }
             }
 
