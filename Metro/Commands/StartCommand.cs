@@ -19,8 +19,17 @@ namespace Metro.Commands
             var startTime = TimeOnly.FromDateTime(DateTime.Now);
             Task currentTask;
 
-            var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("workdays.json")?.Last();
-            currentTask = new Task(taskDescription, startTime, currentWorkDay);
+            var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("workdays.json")?.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
+
+            if (currentWorkDay != null)
+            {
+                currentTask = new Task(taskDescription, startTime, currentWorkDay);
+            }
+            else
+            {
+                Console.Error.WriteLine("Error! Can not start a task without clocking in. Please clock in and try again.");
+                return -1;
+            }
 
             TextFileWriter.Write(currentTask.ToString(), "Tasks.json");
 
