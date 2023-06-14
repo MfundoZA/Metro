@@ -13,8 +13,8 @@ app.Configure(config =>
 {
     config.AddCommand<ClockInCommand>("hi");
     config.AddCommand<ClockOutCommand>("bye");
-    config.AddCommand<StartCommand>("Start");
-    config.AddCommand<StopCommand>("Stop");
+    config.AddCommand<StartCommand>("start");
+    config.AddCommand<StopCommand>("stop");
     config.AddCommand<LogCommand>("log");
     config.AddCommand<ReportCommand>("report");
 });
