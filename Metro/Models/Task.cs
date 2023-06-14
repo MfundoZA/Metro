@@ -11,20 +11,20 @@ namespace Metro.Models
     {
         public int Id { get; set; }
         public string Description { get; set; } = null!;
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly? EndTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public WorkDay WorkDay { get; set; } = null!;
 
         public Task() { }
 
-        public Task(string description, TimeOnly startTime, WorkDay workDay)
+        public Task(string description, DateTime startTime, WorkDay workDay)
         {
             Description = description;
             StartTime = startTime;
             WorkDay = workDay;
         }
 
-        public Task(string description, TimeOnly startTime, TimeOnly endTime, WorkDay workDay)
+        public Task(string description, DateTime startTime, DateTime endTime, WorkDay workDay)
         {
             Description = description;
             StartTime = startTime;

@@ -16,7 +16,7 @@ namespace Metro.Commands
         public override int Execute([NotNull] CommandContext context, [NotNull] StartSettings settings)
         {
             var taskDescription = settings.Description;
-            var startTime = TimeOnly.FromDateTime(DateTime.Now);
+            var startTime = DateTime.Now;
             Task currentTask;
 
             var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("workdays.json")?.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
