@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -23,22 +24,39 @@ namespace Metro.Commands
             // the time spent. A user might also be able to estimate
             // roughly how much time they spent on a task instead
             string description;
-            TimeOnly endTime;
+            DateTime? startTime;
+            DateTime endTime;
             WorkDay? workDay;
             Task newTask;
 
             // get minutes from clock in time or last task
             description = settings.Description;
             var stream = File.Open("Tasks.json", FileMode.Append);
-            var startTime = (TimeOnly) JsonSerializer.DeserializeAsync<List<Task>>(stream, new JsonSerializerOptions
+
+            if (settings.StartTime == null)
             {
-                PropertyNameCaseInsensitive = true
-            }).Result.Last().EndTime;
+                startTime = JsonSerializer.DeserializeAsync<List<Task>>(stream, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }).Result.Where(x => x.StartTime.Date == DateTime.Today.Date).Last().EndTime;
+
+                // if startTime null due to there being no tasks on the current day then start time
+                // is equal to the clock-in time of the day
+                if (startTime.HasValue == false)
+                {
+                    startTime = TextFileReader.ReadAllAsList<WorkDay>("Workday.json")?.Where(x => x.ClockInTime.Date == DateTime.Today).FirstOrDefault().ClockInTime;
+                }
+            }
+            else
+            {
+                startTime = DateTime.Parse(settings.StartTime);
+            }
+
             stream.DisposeAsync();
-            endTime = TimeOnly.FromDateTime(DateTime.Now);
+            endTime = DateTime.Now;
             workDay = TextFileReader.ReadAllAsList<WorkDay>("Workday.json")?.Last();
 
-            newTask = new Task(description, startTime, endTime, workDay);
+            newTask = new Task(description, (DateTime) startTime, endTime, workDay);
 
             TextFileWriter.Write(newTask, "Tasks.json");
             return 0;
