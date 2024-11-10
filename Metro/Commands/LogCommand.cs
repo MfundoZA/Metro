@@ -56,7 +56,7 @@ namespace Metro.Commands
             endTime = DateTime.Now;
             workDay = TextFileReader.ReadAllAsList<WorkDay>("Workday.json")?.Last();
 
-            newTask = new Task(description, (DateTime) startTime, endTime, workDay);
+            newTask = new Task(description, (DateTime) startTime, endTime, workDay.Id);
 
             TextFileWriter.Write(newTask, "Tasks.json");
             return 0;

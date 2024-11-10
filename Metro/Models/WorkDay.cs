@@ -18,15 +18,16 @@ namespace Metro.Models
 
         }
 
+        public WorkDay(int id, DateTime clockInTime)
+        {
+            Id = id;
+            ClockInTime = clockInTime;
+        }
+
         public WorkDay(DateTime clockInTime, DateTime clockOutTime)
         {
             ClockInTime = clockInTime;
             ClockOutTime = clockOutTime;
-        }
-
-        public WorkDay(DateTime clockInTime)
-        {
-            ClockInTime = clockInTime;
         }
 
         public override string ToString() => JsonSerializer.Serialize<WorkDay>(this);

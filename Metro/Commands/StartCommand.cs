@@ -29,8 +29,8 @@ namespace Metro.Commands
             /* Technical Debt */
             if (currentWorkDay != null)
             {
-                currentTasks = TextFileReader.ReadAllAsList<Task>("tasks.json")?.Where(x => x.WorkDay == currentWorkDay).ToList();
-                currentTask = new Task(taskDescription, startTime, currentWorkDay);
+                currentTasks = TextFileReader.ReadAllAsList<Task>("tasks.json")?.Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
+                currentTask = new Task(taskDescription, startTime, currentWorkDay.Id);
 
                 if (currentTasks == null)
                 {

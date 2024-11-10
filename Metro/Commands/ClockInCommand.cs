@@ -38,12 +38,19 @@ namespace Metro.Commands
                 }
             }
 
-            currentWorkday = new WorkDay(clockInTime);
-
             /* Technical Debt */
             var workdays = TextFileReader.ReadAllAsList<WorkDay>(FILE_NAME);
 
             var previousWorkday = workdays?.Last();
+
+            if (previousWorkday != null)
+            {
+                currentWorkday = new WorkDay(previousWorkday.Id + 1, clockInTime);
+            }
+            else
+            {
+                currentWorkday = new WorkDay(1, clockInTime);
+            }
 
             if (workdays != null && previousWorkday?.ClockInTime.Date == currentWorkday.ClockInTime.Date)
             {
