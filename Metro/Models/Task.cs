@@ -13,23 +13,23 @@ namespace Metro.Models
         public string Description { get; set; } = null!;
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public WorkDay WorkDay { get; set; } = null!;
+        public int WorkDayId { get; set; }
 
         public Task() { }
 
-        public Task(string description, DateTime startTime, WorkDay workDay)
+        public Task(string description, DateTime startTime, int workDayId)
         {
             Description = description;
             StartTime = startTime;
-            WorkDay = workDay;
+            WorkDayId = workDayId;
         }
 
-        public Task(string description, DateTime startTime, DateTime endTime, WorkDay workDay)
+        public Task(string description, DateTime startTime, DateTime endTime, int workDayId)
         {
             Description = description;
             StartTime = startTime;
             EndTime = endTime;
-            WorkDay = workDay;
+            WorkDayId = workDayId;
         }
 
         public override string ToString() => JsonSerializer.Serialize<Task>(this);
