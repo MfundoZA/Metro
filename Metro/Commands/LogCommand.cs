@@ -18,7 +18,7 @@ namespace Metro.Commands
         public override int Execute([NotNull] CommandContext context, [NotNull] LogSettings settings)
         {
             // Think about how task logging will work
-            // Are tasks always serial? Obiviously not. So how do we keep
+            // Are tasks always serial? Obviously not. So how do we keep
             // track of multiple task simultaneously? Maybe we can have it
             // so that a user will have to start a task in order to track
             // the time spent. A user might also be able to estimate
@@ -38,13 +38,13 @@ namespace Metro.Commands
                 startTime = JsonSerializer.DeserializeAsync<List<Task>>(stream, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
-                }).Result.Where(x => x.StartTime.Date == DateTime.Today.Date).Last().EndTime;
+                }).Result?.Where(x => x.StartTime.Date == DateTime.Today.Date).Last().EndTime;
 
                 // if startTime null due to there being no tasks on the current day then start time
                 // is equal to the clock-in time of the day
                 if (startTime.HasValue == false)
                 {
-                    startTime = TextFileReader.ReadAllAsList<WorkDay>("Workday.json")?.Where(x => x.ClockInTime.Date == DateTime.Today).FirstOrDefault().ClockInTime;
+                    startTime = TextFileReader.ReadAllAsList<WorkDay>("Workday.json")?.Where(x => x.ClockInTime.Date == DateTime.Today).FirstOrDefault()?.ClockInTime;
                 }
             }
             else
