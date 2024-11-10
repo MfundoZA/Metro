@@ -20,7 +20,7 @@ namespace Metro.Commands
         {
             /* Technical Debt */
             // Pull all tasks and find tasks that have null endtimes
-            List<Task>? tasks = (List<Task>?) TextFileReader.ReadAllAsList<Task>(FILE_NAME).Where(x => x.StartTime.Date == DateTime.Today.Date);
+            List<Task>? tasks = (List<Task>?) TextFileReader.ReadAllAsList<Task>(FILE_NAME).Where(x => x.StartTime.Date == DateTime.Today.Date).ToList();
             List<Task>? currentTasks = new List<Task>();
             List<string>? currentTasksDescriptions = new List<string>();
             List<string>? tasksToStop= new List<string>();
