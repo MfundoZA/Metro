@@ -17,15 +17,17 @@ namespace Metro.Models
 
         public Task() { }
 
-        public Task(string description, DateTime startTime, int workDayId)
+        public Task(int id, string description, DateTime startTime, int workDayId)
         {
+            Id = id;
             Description = description;
             StartTime = startTime;
             WorkDayId = workDayId;
         }
 
-        public Task(string description, DateTime startTime, DateTime endTime, int workDayId)
+        public Task(int id, string description, DateTime startTime, DateTime endTime, int workDayId)
         {
+            Id = id;
             Description = description;
             StartTime = startTime;
             EndTime = endTime;
