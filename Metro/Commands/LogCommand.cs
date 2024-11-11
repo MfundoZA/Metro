@@ -28,6 +28,7 @@ namespace Metro.Commands
             DateTime endTime;
             WorkDay? workDay;
             Task newTask;
+            Task? previousTask;
 
             // get minutes from clock in time or last task
             description = settings.Description;
@@ -55,8 +56,16 @@ namespace Metro.Commands
             stream.DisposeAsync();
             endTime = DateTime.Now;
             workDay = TextFileReader.ReadAllAsList<WorkDay>("Workday.json")?.Last();
+            previousTask = TextFileReader.ReadAllAsList<Task>("Tasks.json")?.Last();
 
-            newTask = new Task(description, (DateTime) startTime, endTime, workDay.Id);
+            if (previousTask != null)
+            {
+                newTask = new Task(previousTask.Id + 1, description, (DateTime)startTime, endTime, workDay.Id);
+            }
+            else
+            {
+                newTask = new Task(1, description, (DateTime)startTime, endTime, workDay.Id);
+            }
 
             TextFileWriter.Write(newTask, "Tasks.json");
             return 0;
