@@ -19,14 +19,21 @@ namespace Metro.Commands
         public override int Execute([NotNull] CommandContext context, [NotNull] StopSettings settings)
         {
             /* Technical Debt */
-            // Pull all tasks and find tasks that have null endtimes
-            List<Task>? tasks = (List<Task>?) TextFileReader.ReadAllAsList<Task>(FILE_NAME).Where(x => x.StartTime.Date == DateTime.Today.Date).ToList();
+            // Pull all tasks and find tasks that have null end times
+            List<WorkDay>? workDays = (List<WorkDay>?) TextFileReader.ReadAllAsList<WorkDay>(FILE_NAME);
+            List<Task>? tasks = (List<Task>?) TextFileReader.ReadAllAsList<Task>(FILE_NAME)?.Where(x => x.StartTime.Date == DateTime.Today.Date).ToList();
             List<Task>? currentTasks = new List<Task>();
             List<string>? currentTasksDescriptions = new List<string>();
             List<string>? tasksToStop= new List<string>();
 
+            if (workDays == null || workDays.Last<WorkDay>().ClockInTime == DateTime.Today.Date.AddDays(-1))
+            {
+                Console.Error.WriteLine("Error! You are currently not clocked in. Please clock in and try again.");
+            }
+
             if (tasks != null)
             {
+
                 foreach (var task in tasks)
                 {
                     if (task.EndTime == null)
@@ -39,6 +46,7 @@ namespace Metro.Commands
             else
             {
                 Console.Error.WriteLine("Error! No tasks found. Please make sure you have tasks that need to be stopped and try again.");
+                return -1;
             }
 
             if (currentTasks != null)
