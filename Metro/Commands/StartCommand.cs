@@ -30,11 +30,21 @@ namespace Metro.Commands
             if (currentWorkDay != null)
             {
                 currentTasks = TextFileReader.ReadAllAsList<Task>("tasks.json")?.Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
-                currentTask = new Task(taskDescription, startTime, currentWorkDay.Id);
 
                 if (currentTasks == null)
                 {
                     currentTasks = new List<Task>();
+                }
+
+                var lastTask = TextFileReader.ReadAllAsList<Task>("tasks.json")?.Last();
+
+                if (lastTask != null)
+                {
+                    currentTask = new Task(lastTask.Id + 1, taskDescription, startTime, currentWorkDay.Id);
+                }
+                else
+                {
+                    currentTask = new Task(1, taskDescription, startTime, currentWorkDay.Id);
                 }
 
                 currentTasks.Add(currentTask);
