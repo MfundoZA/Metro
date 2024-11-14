@@ -33,7 +33,7 @@ namespace Metro.Commands
             {
                 if (DateTime.TryParse(settings.Time, out clockInTime) == false)
                 {
-                    Console.Error.WriteLine("Error! Time format is incorrect. Please try again and ensure the format is " + TIME_FORMAT);
+                    AnsiConsole.Markup("[underline red]" + "Error! Time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
                     return -1;
                 }
             }
@@ -74,6 +74,8 @@ namespace Metro.Commands
             {
                 JsonSerializer.Serialize(fileStream, workdays);
             }
+
+            AnsiConsole.Markup("Successfully clocked in @ [underline]" + currentWorkday.ClockInTime.ToShortTimeString() + "[/]");
 
             return 0;
         }
