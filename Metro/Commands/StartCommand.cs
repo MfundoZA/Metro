@@ -15,43 +15,71 @@ namespace Metro.Commands
 {
     public class StartCommand : Command<StartSettings>
     {
-        private const string FILE_NAME = "tasks.json";
+        private const string FILE_NAME = "Tasks.json";
+        private const string TIME_FORMAT = "HH:MM";
 
         public override int Execute([NotNull] CommandContext context, [NotNull] StartSettings settings)
         {
-            var taskDescription = settings.Description;
-            var startTime = DateTime.Now;
+            string taskDescription = settings.Description;
+            DateTime startTime;
+            DateTime endTime;
             Task currentTask;
 
-            var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("workdays.json")?.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
+            var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("Workdays.json")?.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
             List<Task>? currentTasks;
 
             /* Technical Debt */
             if (currentWorkDay != null)
             {
-                currentTasks = TextFileReader.ReadAllAsList<Task>("tasks.json")?.Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
+                currentTasks = TextFileReader.ReadAllAsList<Task>("Tasks.json")?.Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
 
                 if (currentTasks == null)
                 {
                     currentTasks = new List<Task>();
                 }
 
-                var lastTask = TextFileReader.ReadAllAsList<Task>("tasks.json")?.Last();
+                var lastTask = TextFileReader.ReadAllAsList<Task>("Tasks.json")?.Last();
 
-                if (lastTask != null)
+                if (settings.StartTime != null)
                 {
-                    currentTask = new Task(lastTask.Id + 1, taskDescription, startTime, currentWorkDay.Id);
+                    if (DateTime.TryParse(settings.StartTime, out startTime) == false)
+                    {
+                        AnsiConsole.Markup("[underline red]" + "Error! Start time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
+                        return -1;
+                    }
                 }
                 else
                 {
-                    currentTask = new Task(1, taskDescription, startTime, currentWorkDay.Id);
+                    startTime = DateTime.Now;
+                }
+
+                if (settings.EndTime != null)
+                {
+                    if (DateTime.TryParse(settings.EndTime, out endTime) == false)
+                    {
+                        AnsiConsole.Markup("[underline red]" + "Error! End time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
+                        return -1;
+                    }
+                }
+                else
+                {
+                    endTime = DateTime.Now;
+                }
+
+                if (lastTask != null)
+                {
+                    currentTask = new Task(lastTask.Id + 1, taskDescription, startTime, endTime, currentWorkDay.Id);
+                }
+                else
+                {
+                    currentTask = new Task(1, taskDescription, startTime, endTime, currentWorkDay.Id);
                 }
 
                 currentTasks.Add(currentTask);
             }
             else
             {
-                Console.Error.WriteLine("Error! Can not start a task without clocking in. Please clock in and try again.");
+                AnsiConsole.Markup("[Red Underline]" + "Error! Can not start a task without clocking in.[/] Please clock in and try again.");
                 return -1;
             }
 
@@ -60,7 +88,15 @@ namespace Metro.Commands
                 JsonSerializer.Serialize(fileStream, currentTasks);
             }
 
-            Console.WriteLine($"Tracking Task: {taskDescription}");
+            if (settings.EndTime == null)
+            {
+                Console.WriteLine($"Tracking Task: {taskDescription}");
+            }
+            else
+            {
+                Console.WriteLine($"Logging Task: {taskDescription}");
+            }
+
             return 0;
         }
     }
