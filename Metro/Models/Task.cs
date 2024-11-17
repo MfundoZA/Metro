@@ -25,7 +25,7 @@ namespace Metro.Models
             WorkDayId = workDayId;
         }
 
-        public Task(int id, string description, DateTime startTime, DateTime endTime, int workDayId)
+        public Task(int id, string description, DateTime startTime, DateTime? endTime, int workDayId)
         {
             Id = id;
             Description = description;
