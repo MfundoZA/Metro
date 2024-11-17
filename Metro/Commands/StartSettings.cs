@@ -12,10 +12,10 @@ namespace Metro.Commands
         [CommandArgument(0, "<description>")]
         public string Description { get; set; } = null!;
 
-        [CommandArgument(1, "<startTime>")]
+        [CommandArgument(1, "[startTime]")]
         public string? StartTime { get; set; }
 
-        [CommandArgument(2, "<endTime>")]
+        [CommandArgument(2, "[endTime]")]
         public string EndTime { get; set; } = null!;
     }
 }

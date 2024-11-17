@@ -22,7 +22,7 @@ namespace Metro.Commands
         {
             string taskDescription = settings.Description;
             DateTime startTime;
-            DateTime endTime;
+            DateTime? endTime;
             Task currentTask;
 
             var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("Workdays.json")?.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
@@ -55,15 +55,20 @@ namespace Metro.Commands
 
                 if (settings.EndTime != null)
                 {
-                    if (DateTime.TryParse(settings.EndTime, out endTime) == false)
+                    DateTime tempEndTime;
+
+                    if (DateTime.TryParse(settings.EndTime, out tempEndTime) == false)
                     {
                         AnsiConsole.Markup("[underline red]" + "Error! End time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
                         return -1;
                     }
+
+                    // If parsing successful assign tempEndTime to endTime
+                    endTime = tempEndTime;
                 }
                 else
                 {
-                    endTime = DateTime.Now;
+                    endTime = null;
                 }
 
                 if (lastTask != null)
