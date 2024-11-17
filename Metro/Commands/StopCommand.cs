@@ -63,12 +63,12 @@ namespace Metro.Commands
 
                 foreach (string taskDescription in tasksToStop)
                 {
-                    currentTasks.Where(x => x.Description == taskDescription).First().EndTime = timeFinished;
+                    tasks.Where(x => x.Description == taskDescription).First().EndTime = timeFinished;
                 }
 
                 using (var fileStream = new FileStream(FILE_NAME, FileMode.OpenOrCreate))
                 {
-                    JsonSerializer.Serialize(fileStream, currentTasks);
+                    JsonSerializer.Serialize(fileStream, tasks);
                 }
             }
 
