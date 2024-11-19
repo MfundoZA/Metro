@@ -88,7 +88,7 @@ namespace Metro.Commands
                 return -1;
             }
 
-            using (var fileStream = new FileStream(FILE_NAME, FileMode.OpenOrCreate))
+            using (var fileStream = new FileStream(FILE_NAME, FileMode.Append))
             {
                 JsonSerializer.Serialize(fileStream, currentTasks);
             }
