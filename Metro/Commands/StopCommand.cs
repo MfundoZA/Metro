@@ -31,8 +31,18 @@ namespace Metro.Commands
                 Console.Error.WriteLine("Error! You are currently not clocked in. Please clock in and try again.");
             }
 
-            if (tasks != null)
+            if (tasks == null || tasks.Count == 0)
             {
+                AnsiConsole.Markup("[red underline]" + "Error! No tasks found.[/] Please make sure you have tasks that need to be stopped and try again.");
+                return -1;
+            }
+
+            var areTasksCurrentlyTracked = tasks.Where(x => x.EndTime == null).ToList().Count > 0;
+
+            if (areTasksCurrentlyTracked == false) {
+                AnsiConsole.Markup("[red underline]" + "Error! No tasks found.[/] Please make sure you have tasks that need to be stopped and try again.");
+                return -1;
+            }
 
                 foreach (var task in tasks)
                 {
