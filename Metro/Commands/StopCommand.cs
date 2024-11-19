@@ -28,7 +28,8 @@ namespace Metro.Commands
 
             if (workDays == null || workDays.Last<WorkDay>().ClockInTime == DateTime.Today.Date.AddDays(-1))
             {
-                Console.Error.WriteLine("Error! You are currently not clocked in. Please clock in and try again.");
+                AnsiConsole.Markup("[red underline]" + "Error! You are currently not clocked in.[/] Please clock in and try again.");
+                return -1;
             }
 
             if (tasks == null || tasks.Count == 0)
@@ -44,19 +45,13 @@ namespace Metro.Commands
                 return -1;
             }
 
-                foreach (var task in tasks)
-                {
-                    if (task.EndTime == null)
-                    {
-                        currentTasks.Add(task);
-                        currentTasksDescriptions.Add(task.Description);
-                    }
-                }
-            }
-            else
+            foreach (var task in tasks)
             {
-                Console.Error.WriteLine("Error! No tasks found. Please make sure you have tasks that need to be stopped and try again.");
-                return -1;
+                if (task.EndTime == null)
+                {
+                    currentTasks.Add(task);
+                    currentTasksDescriptions.Add(task.Description);
+                }
             }
 
             if (currentTasks != null)
@@ -82,6 +77,7 @@ namespace Metro.Commands
                 }
             }
 
+            Console.WriteLine("Task(s) stopped successfully.");
             return 0;
         }
     }
