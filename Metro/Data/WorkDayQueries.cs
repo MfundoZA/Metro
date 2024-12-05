@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ResourceManager.Core.Data
+namespace Metro.Data
 {
     public class WorkDayQueries : Database
     {
