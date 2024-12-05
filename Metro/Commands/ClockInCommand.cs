@@ -1,78 +1,65 @@
 ﻿using Metro.Models;
-using Metro.Persistance;
+using ResourceManager.Core.Data;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Metro.Commands
 {
     public class ClockInCommand : Command<ClockInSettings>
     {
         private const string TIME_FORMAT = "HH:MM";
-        private const string FILE_NAME = "Workdays.json";
-
+        
         public override int Execute([NotNull] CommandContext context, [NotNull] ClockInSettings settings)
         {
-            DateTime clockInTime;
+            DateTime tempClockInTime;
+            TimeOnly clockInTime;
             WorkDay currentWorkday;
+            WorkDayQueries workDayQueries = new();
 
             if (settings.Time == null)
             {
-                clockInTime = DateTime.Now;
+                tempClockInTime = DateTime.Now;
+                clockInTime = TimeOnly.FromDateTime(tempClockInTime);
             }
             else
             {
-                if (DateTime.TryParse(settings.Time, out clockInTime) == false)
+                if (DateTime.TryParse(settings.Time, out tempClockInTime) == false)
                 {
                     AnsiConsole.Markup("[underline red]" + "Error! Time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
                     return -1;
                 }
+
+                clockInTime = TimeOnly.FromDateTime(tempClockInTime);
             }
 
-            /* Technical Debt */
-            var workdays = TextFileReader.ReadAllAsList<WorkDay>(FILE_NAME);
 
-            var previousWorkday = workdays?.Last();
+            bool workdaysExist = workDayQueries.GetWorkDaysCount() > 0;
+            WorkDay? previousWorkDay;
 
-            if (previousWorkday != null)
+            previousWorkDay = workDayQueries.GetWorkDays().LastOrDefault();
+
+            if (workdaysExist == true)
             {
-                currentWorkday = new WorkDay(previousWorkday.Id + 1, clockInTime);
+
+                currentWorkday = new WorkDay(previousWorkDay.Id + 1, DateOnly.FromDateTime(DateTime.Now), clockInTime, null);
             }
             else
             {
-                currentWorkday = new WorkDay(1, clockInTime);
+                currentWorkday = new WorkDay(1, DateOnly.FromDateTime(DateTime.Now), clockInTime, null);
             }
 
-            if (workdays != null && previousWorkday?.ClockInTime.Date == currentWorkday.ClockInTime.Date)
+            if (workdaysExist == true && previousWorkDay?.WorkDate == currentWorkday.WorkDate)
             {
                 if (settings.Force == true || AnsiConsole.Confirm("Warning! You have already clocked in today. Do you want to override?"))
                 {
-                    workdays.Remove(workdays.Last());
-                    workdays.Add(currentWorkday);
+                    currentWorkday.Id = previousWorkDay.Id;
+                    workDayQueries.UpdateWorkDay(currentWorkday);
                 }
             }
             else
             {
-                if (workdays == null)
-                {
-                    workdays = new List<WorkDay>();
-                }
-
-                workdays.Add(currentWorkday);
-            }
-
-            using (var fileStream = new FileStream(FILE_NAME, FileMode.OpenOrCreate))
-            {
-                JsonSerializer.Serialize(fileStream, workdays);
+                workDayQueries.CreateNewWorkDay(currentWorkday);
             }
 
             AnsiConsole.Markup("Successfully clocked in @ [underline]" + currentWorkday.ClockInTime.ToShortTimeString() + "[/]");
