@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 using Metro.Models;
 
-namespace ResourceManager.Core.Data
+namespace Metro.Data
 {
     public class Database
     {
