@@ -11,13 +11,13 @@ namespace Metro.Models
     {
         public int Id { get; set; }
         public string Description { get; set; } = null!;
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly? EndTime { get; set; }
         public int WorkDayId { get; set; }
 
         public Task() { }
 
-        public Task(int id, string description, DateTime startTime, int workDayId)
+        public Task(int id, string description, TimeOnly startTime, int workDayId)
         {
             Id = id;
             Description = description;
@@ -25,7 +25,7 @@ namespace Metro.Models
             WorkDayId = workDayId;
         }
 
-        public Task(int id, string description, DateTime startTime, DateTime? endTime, int workDayId)
+        public Task(int id, string description, TimeOnly startTime, TimeOnly? endTime, int workDayId)
         {
             Id = id;
             Description = description;
@@ -33,7 +33,5 @@ namespace Metro.Models
             EndTime = endTime;
             WorkDayId = workDayId;
         }
-
-        public override string ToString() => JsonSerializer.Serialize<Task>(this);
     }
 }

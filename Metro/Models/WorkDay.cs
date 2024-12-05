@@ -10,26 +10,27 @@ namespace Metro.Models
     public class WorkDay
     {
         public int Id { get; set; }
-        public DateTime ClockInTime { get; set; }
-        public DateTime? ClockOutTime { get; set;}
+        public DateOnly WorkDate { get; set; }
+        public TimeOnly ClockInTime { get; set; }
+        public TimeOnly? ClockOutTime { get; set;}
 
         public WorkDay()
         {
 
         }
 
-        public WorkDay(int id, DateTime clockInTime)
+        public WorkDay(DateOnly workDate, TimeOnly clockInTime)
         {
-            Id = id;
+            WorkDate = workDate;
             ClockInTime = clockInTime;
         }
 
-        public WorkDay(DateTime clockInTime, DateTime clockOutTime)
+        public WorkDay(int id, DateOnly workDate, TimeOnly clockInTime, TimeOnly? clockOutTime)
         {
+            Id = id;
+            WorkDate = workDate;
             ClockInTime = clockInTime;
             ClockOutTime = clockOutTime;
         }
-
-        public override string ToString() => JsonSerializer.Serialize<WorkDay>(this);
     }
 }
