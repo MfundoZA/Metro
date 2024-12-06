@@ -15,7 +15,6 @@ namespace Metro.Commands
 {
     public class StartCommand : Command<StartSettings>
     {
-        private const string FILE_NAME = "Tasks.json";
         private const string TIME_FORMAT = "HH:MM";
 
         public override int Execute([NotNull] CommandContext context, [NotNull] StartSettings settings)
@@ -94,11 +93,11 @@ namespace Metro.Commands
 
             if (settings.EndTime == null)
             {
-                Console.WriteLine($"Tracking Task: {taskDescription}");
+                AnsiConsole.Markup("[green underline]" + $"Tracking Task[/]: {taskDescription}");
             }
             else
             {
-                Console.WriteLine($"Logging Task: {taskDescription}");
+                AnsiConsole.Markup("[green underline]" + $"Logging Task[/]: {taskDescription}");
             }
 
             return 0;

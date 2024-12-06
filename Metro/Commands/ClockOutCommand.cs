@@ -34,7 +34,7 @@ namespace Metro.Commands
                 }
                 else
                 {
-                    Console.Error.WriteLine("Error! Time format is incorrect. Please try again and ensure the format is " + TIME_FORMAT);
+                    AnsiConsole.Markup("[red underline]" + "Error! Time format is incorrect.[/] Please try again and ensure the format is " + TIME_FORMAT);
                     return -1;
                 }
             }
@@ -47,7 +47,7 @@ namespace Metro.Commands
 
             if (workDays.Count == 0 || currentWorkDay == null || currentWorkDay.ClockInTime == TimeOnly.MinValue)
             {
-                Console.Error.WriteLine("Error! Can not clock out without having clocked in first.");
+                AnsiConsole.Markup("[red underline]" + "Error:[/] Can not clock out without having clocked in first.");
                 return -1;
             }
 
@@ -64,7 +64,23 @@ namespace Metro.Commands
                 }
             }
 
-            Console.WriteLine("[green underline]" + "Bye[/]!");
+AnsiConsole.Markup("MMMMMMMM               MMMMMMMM                             tttt                                              ");
+AnsiConsole.Markup("M:::::::M             M:::::::M                          ttt:::t                                             "); 
+AnsiConsole.Markup("M::::::::M           M::::::::M                          t:::::t                                              ");
+AnsiConsole.Markup("M:::::::::M         M:::::::::M                          t:::::t                                              ");
+AnsiConsole.Markup("M::::::::::M       M::::::::::M    eeeeeeeeeeee    ttttttt:::::ttttttt   rrrrr   rrrrrrrrr      ooooooooooo   ");
+AnsiConsole.Markup("M:::::::::::M     M:::::::::::M  ee::::::::::::ee  t:::::::::::::::::t   r::::rrr:::::::::r   oo:::::::::::oo ");
+AnsiConsole.Markup("M:::::::M::::M   M::::M:::::::M e::::::eeeee:::::eet:::::::::::::::::t   r:::::::::::::::::r o:::::::::::::::o");
+AnsiConsole.Markup("M::::::M M::::M M::::M M::::::Me::::::e     e:::::etttttt:::::::tttttt   rr::::::rrrrr::::::ro:::::ooooo:::::o");
+AnsiConsole.Markup("M::::::M  M::::M::::M  M::::::Me:::::::eeeee::::::e      t:::::t          r:::::r     r:::::ro::::o     o::::o");
+AnsiConsole.Markup("M::::::M   M:::::::M   M::::::Me:::::::::::::::::e       t:::::t          r:::::r     rrrrrrro::::o     o::::o");
+AnsiConsole.Markup("M::::::M    M:::::M    M::::::Me::::::eeeeeeeeeee        t:::::t          r:::::r            o::::o     o::::o");
+AnsiConsole.Markup("M::::::M     MMMMM     M::::::Me:::::::e                 t:::::t    ttttttr:::::r            o::::o     o::::o");
+AnsiConsole.Markup("M::::::M               M::::::Me::::::::e                t::::::tttt:::::tr:::::r            o:::::ooooo:::::o");
+AnsiConsole.Markup("M::::::M               M::::::M e::::::::eeeeeeee        tt::::::::::::::tr:::::r            o:::::::::::::::o");
+AnsiConsole.Markup("M::::::M               M::::::M  ee:::::::::::::e          tt:::::::::::ttr:::::r             oo:::::::::::oo" );
+AnsiConsole.Markup("MMMMMMMM               MMMMMMMM    eeeeeeeeeeeeee            ttttttttttt  rrrrrrr               ooooooooooo");
+
             return 0;
         }
     }

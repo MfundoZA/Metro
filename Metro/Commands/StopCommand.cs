@@ -19,9 +19,6 @@ namespace Metro.Commands
         {
             WorkDayQueries workDayQueries = new();
             TaskQueries taskQueries = new();
-
-            /* Technical Debt */
-            // Pull all tasks and find tasks that have null end times
             List<WorkDay>? workDays = workDayQueries.GetWorkDays();
             WorkDay? currentWorkDay = workDays.Where(x => x.WorkDate == DateOnly.FromDateTime(DateTime.Now)).FirstOrDefault();
 
@@ -85,7 +82,7 @@ namespace Metro.Commands
                 }
             }
 
-            Console.WriteLine("Task(s) stopped successfully.");
+            Console.WriteLine("[green underline]" + "Successfully[/] stopped task(s).");
             return 0;
         }
     }

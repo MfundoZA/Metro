@@ -26,7 +26,7 @@ namespace Metro.Commands
             {
                 if (DateTime.TryParse(settings.Time, out tempClockInTime) == false)
                 {
-                    AnsiConsole.Markup("[underline red]" + "Error! Time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
+                    AnsiConsole.Markup("[underline red]" + "Error: Time format is incorrect.[/] Please try again and ensure the format is as follows: " + TIME_FORMAT);
                     return -1;
                 }
 
@@ -62,7 +62,7 @@ namespace Metro.Commands
                 workDayQueries.CreateNewWorkDay(currentWorkday);
             }
 
-            AnsiConsole.Markup("Successfully clocked in @ [underline]" + currentWorkday.ClockInTime.ToShortTimeString() + "[/]");
+            AnsiConsole.Markup("[green underline]" + "Successfully clocked in @ [underline]" + currentWorkday.ClockInTime.ToShortTimeString() + "[/]");
 
             return 0;
         }
