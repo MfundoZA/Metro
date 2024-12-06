@@ -1,5 +1,5 @@
-﻿using Metro.Models;
-using ResourceManager.Core.Data;
+﻿using Metro.Data;
+using Metro.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Diagnostics.CodeAnalysis;

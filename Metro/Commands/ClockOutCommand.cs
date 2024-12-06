@@ -1,5 +1,4 @@
 ﻿using Metro.Models;
-using Metro.Persistance;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
