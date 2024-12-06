@@ -1,4 +1,5 @@
-﻿using Metro.Models;
+﻿using Metro.Data;
+using Metro.Models;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
@@ -18,55 +19,49 @@ namespace Metro.Commands
         public override int Execute([NotNull] CommandContext context, [NotNull] ClockOutSettings settings)
         {
 
-            DateTime clockOutTime;
+            TimeOnly clockOutTime;
+            DateTime tempClockOutTime;
             WorkDay? currentWorkDay;
+            WorkDayQueries workDayQueries = new();
 
             List<WorkDay> workDays = workDayQueries.GetWorkDays();
 
-            if (settings.Time == null)
+            if (settings.Time != null)
             {
-                clockOutTime = DateTime.Now;
-            }
-            else
-            {
-                if (DateTime.TryParse(settings.Time, out clockOutTime) == false)
+                if (DateTime.TryParse(settings.Time, out tempClockOutTime) == true)
+                {
+                    clockOutTime = TimeOnly.FromDateTime(tempClockOutTime);
+                }
+                else
                 {
                     Console.Error.WriteLine("Error! Time format is incorrect. Please try again and ensure the format is " + TIME_FORMAT);
                     return -1;
                 }
             }
-
-            if (workDays != null)
+            else
             {
-                currentWorkDay = workDays.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
+                clockOutTime = TimeOnly.FromDateTime(DateTime.Now);
+            }
 
-                if (currentWorkDay != null)
-                {
-                    var currentWorkDayIndex = workDays.ToList().IndexOf(currentWorkDay);
+           currentWorkDay = workDays.Where(x => x.WorkDate == DateOnly.FromDateTime(DateTime.Today.Date)).FirstOrDefault();
 
-                    if ((currentWorkDay.ClockOutTime == null) || (currentWorkDay.ClockOutTime.GetValueOrDefault().Date == DateTime.Today.Date && settings.Force == true))
-                    {
-                        currentWorkDay.ClockOutTime = clockOutTime;
-                    }
-                    else if (currentWorkDay.ClockOutTime != null && settings.Force == false)
-                    {
-                        if (AnsiConsole.Confirm("Warning! You have already clocked out today. Do you want to override?"))
-                        {
-                            workDays.RemoveAt(currentWorkDayIndex);
-                            workDays.Insert(currentWorkDayIndex, currentWorkDay);
-                        }
-                    }
-                    else
-                    {
-                        Console.Error.WriteLine("Error! Can not clock out without having clocked in first.");
-                        return -1;
-                    }
-                }
+            if (workDays.Count == 0 || currentWorkDay == null || currentWorkDay.ClockInTime == TimeOnly.MinValue)
+            {
+                Console.Error.WriteLine("Error! Can not clock out without having clocked in first.");
+                return -1;
+            }
+
+
+            if (settings.Force == true)
+            {
+                currentWorkDay.ClockOutTime = clockOutTime;
             }
             else
             {
-                Console.Error.WriteLine("Error! Can not clock out without having clocked in.");
-                return -1;
+                if (AnsiConsole.Confirm("Warning! You have already clocked out today. Do you want to override?"))
+                {
+                    workDayQueries.UpdateWorkDay(currentWorkDay);
+                }
             }
 
             Console.WriteLine("[green underline]" + "Bye[/]!");
