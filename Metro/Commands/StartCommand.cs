@@ -22,23 +22,25 @@ namespace Metro.Commands
         {
             string taskDescription = settings.Description;
             DateTime startTime;
-            DateTime? endTime;
+            TimeOnly? endTime;
             Task currentTask;
+            WorkDayQueries workDayQueries = new();
+            TaskQueries taskQueries = new();
 
-            var currentWorkDay = TextFileReader.ReadAllAsList<WorkDay>("Workdays.json")?.Where(x => x.ClockInTime.Date == DateTime.Today.Date).FirstOrDefault();
+            var currentWorkDay = workDayQueries.GetWorkDays().Where(x => x.WorkDate == DateOnly.FromDateTime(DateTime.Today)).FirstOrDefault();
             List<Task>? currentTasks;
 
             /* Technical Debt */
             if (currentWorkDay != null)
             {
-                currentTasks = TextFileReader.ReadAllAsList<Task>("Tasks.json")?.Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
+                currentTasks = taskQueries.GetTasks()?.Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
 
                 if (currentTasks == null)
                 {
                     currentTasks = new List<Task>();
                 }
 
-                var lastTask = TextFileReader.ReadAllAsList<Task>("Tasks.json")?.Last();
+                var lastTask = currentTasks.Count == 0 ? null : currentTasks?.Last();
 
                 if (settings.StartTime != null)
                 {
@@ -64,7 +66,7 @@ namespace Metro.Commands
                     }
 
                     // If parsing successful assign tempEndTime to endTime
-                    endTime = tempEndTime;
+                    endTime = TimeOnly.FromDateTime(tempEndTime);
                 }
                 else
                 {
@@ -73,11 +75,11 @@ namespace Metro.Commands
 
                 if (lastTask != null)
                 {
-                    currentTask = new Task(lastTask.Id + 1, taskDescription, startTime, endTime, currentWorkDay.Id);
+                    currentTask = new Task(lastTask.Id + 1, taskDescription, TimeOnly.FromDateTime(startTime), endTime, currentWorkDay.Id);
                 }
                 else
                 {
-                    currentTask = new Task(1, taskDescription, startTime, endTime, currentWorkDay.Id);
+                    currentTask = new Task(1, taskDescription, TimeOnly.FromDateTime(startTime), endTime, currentWorkDay.Id);
                 }
 
                 currentTasks.Add(currentTask);
@@ -88,10 +90,7 @@ namespace Metro.Commands
                 return -1;
             }
 
-            using (var fileStream = new FileStream(FILE_NAME, FileMode.Append))
-            {
-                JsonSerializer.Serialize(fileStream, currentTasks);
-            }
+            taskQueries.CreateNewTask(currentTask);
 
             if (settings.EndTime == null)
             {
