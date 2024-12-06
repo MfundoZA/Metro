@@ -1,4 +1,4 @@
-using Metro.Models;
+﻿using Metro.Models;
 using Spectre.Console.Cli;
 using System;
 using System.Collections.Generic;
@@ -8,24 +8,34 @@ using System.Text;
 using Task = Metro.Models.Task;
 using Spectre.Console;
 using System.Text.Json;
+using Metro.Data;
 
 namespace Metro.Commands
 {
     public class StopCommand : Command<StopSettings>
     {
-        private const string FILE_NAME = "Tasks.json";
 
         public override int Execute([NotNull] CommandContext context, [NotNull] StopSettings settings)
         {
+            WorkDayQueries workDayQueries = new();
+            TaskQueries taskQueries = new();
+
             /* Technical Debt */
             // Pull all tasks and find tasks that have null end times
-            List<WorkDay>? workDays = (List<WorkDay>?) TextFileReader.ReadAllAsList<WorkDay>(FILE_NAME);
-            List<Task>? tasks = (List<Task>?) TextFileReader.ReadAllAsList<Task>(FILE_NAME)?.Where(x => x.StartTime.Date == DateTime.Today.Date).ToList();
+            List<WorkDay>? workDays = workDayQueries.GetWorkDays();
+            WorkDay? currentWorkDay = workDays.Where(x => x.WorkDate == DateOnly.FromDateTime(DateTime.Now)).FirstOrDefault();
+
+            List<Task>? tasks = null;
+
+            if (currentWorkDay != null)
+            {
+                tasks = taskQueries.GetTasks().Where(x => x.WorkDayId == currentWorkDay.Id).ToList();
+            }
             List<Task>? currentTasks = new List<Task>();
             List<string>? currentTasksDescriptions = new List<string>();
-            List<string>? tasksToStop= new List<string>();
+            List<string>? tasksToStop = new List<string>();
 
-            if (workDays == null || workDays.Last<WorkDay>().ClockInTime == DateTime.Today.Date.AddDays(-1))
+            if (workDays == null || workDays.Last<WorkDay>().WorkDate == DateOnly.FromDateTime(DateTime.Today.Date.AddDays(-1)))
             {
                 AnsiConsole.Markup("[red underline]" + "Error! You are currently not clocked in.[/] Please clock in and try again.");
                 return -1;
@@ -37,16 +47,17 @@ namespace Metro.Commands
                 return -1;
             }
 
-            var areTasksCurrentlyTracked = tasks.Where(x => x.EndTime == null).ToList().Count > 0;
+            var areTasksCurrentlyTracked = tasks.Where(x => x.EndTime == TimeOnly.MinValue).ToList().Count > 0;
 
-            if (areTasksCurrentlyTracked == false) {
+            if (areTasksCurrentlyTracked == false)
+            {
                 AnsiConsole.Markup("[red underline]" + "Error! No tasks found.[/] Please make sure you have tasks that need to be stopped and try again.");
                 return -1;
             }
 
             foreach (var task in tasks)
             {
-                if (task.EndTime == null)
+                if (task.EndTime == TimeOnly.MinValue)
                 {
                     currentTasks.Add(task);
                     currentTasksDescriptions.Add(task.Description);
@@ -67,12 +78,10 @@ namespace Metro.Commands
 
                 foreach (string taskDescription in tasksToStop)
                 {
-                    tasks.Where(x => x.Description == taskDescription).First().EndTime = timeFinished;
-                }
+                    Task taskSelected = tasks.Where(x => x.Description == taskDescription).First();
+                    taskSelected.EndTime = TimeOnly.FromDateTime(timeFinished);
 
-                using (var fileStream = new FileStream(FILE_NAME, FileMode.OpenOrCreate))
-                {
-                    JsonSerializer.Serialize(fileStream, tasks);
+                    taskQueries.UpdateTask(taskSelected);
                 }
             }
 
