@@ -21,7 +21,7 @@ namespace Metro.Commands
             DateTime clockOutTime;
             WorkDay? currentWorkDay;
 
-            var workDays = TextFileReader.ReadAllAsList<WorkDay>("Workdays.json");
+            List<WorkDay> workDays = workDayQueries.GetWorkDays();
 
             if (settings.Time == null)
             {
@@ -69,15 +69,7 @@ namespace Metro.Commands
                 return -1;
             }
 
-            // save locally
-            var stream = File.Open("Workdays.json", FileMode.Create);
-            JsonSerializer.SerializeAsync(stream, workDays, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            stream.DisposeAsync();
-            Console.WriteLine("Bye");
+            Console.WriteLine("[green underline]" + "Bye[/]!");
             return 0;
         }
     }
