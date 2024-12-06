@@ -42,7 +42,7 @@ namespace Metro.Commands
             if (workdaysExist == true)
             {
 
-                currentWorkday = new WorkDay(previousWorkDay.Id + 1, DateOnly.FromDateTime(DateTime.Now), clockInTime, null);
+                currentWorkday = new WorkDay(previousWorkDay!.Id + 1, DateOnly.FromDateTime(DateTime.Now), clockInTime, null);
             }
             else
             {
