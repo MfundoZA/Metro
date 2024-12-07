@@ -82,7 +82,7 @@ namespace Metro.Commands
                 }
             }
 
-            Console.WriteLine("[green underline]" + "Successfully[/] stopped task(s).");
+            AnsiConsole.Markup("[green underline]" + "Successfully[/] stopped task(s).");
             return 0;
         }
     }
