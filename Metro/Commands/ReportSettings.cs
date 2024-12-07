@@ -9,7 +9,7 @@ namespace Metro.Commands
 {
     public class ReportSettings : CommandSettings
     {
-        [CommandArgument(0, "[timeFrame]")]
-        public int timeFrame { get; set; }
+        [CommandArgument(0, "[duration]")]
+        public string? Duration { get; set; }
     }
 }
