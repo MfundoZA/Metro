@@ -6,6 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Metro.Commands
 {
+    /// <summary>
+    /// Class <c>ClockInCommand</c> holds the logic for recording the time the user begins recording their tasks. This would normally be around the start time of their 
+    /// first task but that may not always be the case.
+    /// </summary>
     public class ClockInCommand : Command<ClockInSettings>
     {
         private const string TIME_FORMAT = "HH:MM";
@@ -33,7 +37,6 @@ namespace Metro.Commands
                 clockInTime = TimeOnly.FromDateTime(tempClockInTime);
             }
 
-
             bool workdaysExist = workDayQueries.GetWorkDaysCount() > 0;
             WorkDay? previousWorkDay;
 
@@ -56,13 +59,18 @@ namespace Metro.Commands
                     currentWorkday.Id = previousWorkDay.Id;
                     workDayQueries.UpdateWorkDay(currentWorkday);
                 }
+                else
+                {
+                    AnsiConsole.Markup("Clock in cancelled.");
+                    return 0;
+                }
             }
             else
             {
                 workDayQueries.CreateNewWorkDay(currentWorkday);
             }
 
-            AnsiConsole.Markup("[green underline]" + "Successfully clocked in @ [underline]" + currentWorkday.ClockInTime.ToShortTimeString() + "[/]");
+            AnsiConsole.Markup("[green underline]" + "Successfully[/] clocked in @ [underline]" + currentWorkday.ClockInTime.ToShortTimeString() + "[/]");
 
             return 0;
         }
