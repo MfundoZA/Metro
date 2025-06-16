@@ -58,7 +58,7 @@ namespace Metro.Commands
             }
             else
             {
-                if (AnsiConsole.Confirm("Warning! You have already clocked out today. Do you want to override?"))
+                if (currentWorkDay.ClockOutTime != TimeOnly.MinValue && AnsiConsole.Confirm("Warning! You have already clocked out today. Do you want to override?"))
                 {
                     workDayQueries.UpdateWorkDay(currentWorkDay);
                 }

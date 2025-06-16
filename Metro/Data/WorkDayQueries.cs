@@ -195,7 +195,7 @@ namespace Metro.Data
             if (Connection.State == ConnectionState.Open)
             {
                 string updateWorkDay = $@"UPDATE WorkDays 
-                                         SET [work_date] = '{workDay.WorkDate.ToString()}', [clock_in_time] = '{workDay.ClockInTime.ToString()}', [clock_out_time] = {workDay.ClockOutTime.ToString()} WHERE [id] = {workDay.Id}";
+                                         SET [work_date] = '{workDay.WorkDate.ToString()}', [clock_in_time] = '{workDay.ClockInTime.ToString()}', [clock_out_time] = '{workDay.ClockOutTime}' WHERE [id] = {workDay.Id}";
 
                 command = new SqlCommand(updateWorkDay, Connection);
                 command.ExecuteNonQuery();

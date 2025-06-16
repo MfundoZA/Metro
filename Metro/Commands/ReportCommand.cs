@@ -23,6 +23,10 @@ namespace Metro.Commands
                         task => task.WorkDayId, workDay => workDay.Id,
                         (task, workDay) => new { Id = $"{task.Id}", Description = $"{task.Description}", StartTime = $"{task.StartTime}", EndTime = $"{task.EndTime}" });
 
+            Table reportTable = new Table();
+
+
+
             foreach (var task in query)
             {
                 AnsiConsole.Markup($"Id: {task.Id} \n");
